@@ -17,6 +17,8 @@ RUN \
   apt-get install -y \
     git \
     jq \
+    nodejs \
+    golang-go \
     libatomic1 \
     nano \
     net-tools \
@@ -32,8 +34,14 @@ RUN \
     /tmp/code-server.tar.gz -L \
     "https://github.com/coder/code-server/releases/download/v${CODE_RELEASE}/code-server-${CODE_RELEASE}-linux-armv7l.tar.gz" && \
   tar xf /tmp/code-server.tar.gz -C \
-    /app/code-server --strip-components=1 && \
-  echo "**** clean up ****" && \
+    /app/code-server --strip-components=1
+
+
+RUN curl -o /tmp/nodesource_setup.sh -sL https://deb.nodesource.com/setup_19.x
+RUN sh /tmp/nodesource_setup.sh
+RUN apt-get install nodejs -y
+
+RUN echo "**** clean up ****" && \
   apt-get clean && \
   rm -rf \
     /config/* \
